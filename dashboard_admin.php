@@ -25,21 +25,16 @@ $usuarios_result = $conn->query($sql_usuarios);
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Administrador</title>
+    <link rel="stylesheet" href="dashboard_admin.css">
 </head>
 <body>
-    <h2>Bienvenido, Administrador <?php echo $nombre_usuario; ?></h2>
+    <?php include 'header.php'; ?>
+    <h2>Bienvenido, Administrador <?php echo htmlspecialchars($nombre_usuario); ?></h2>
     <h3>Opciones</h3>
 
     <h4>Gestión de Competencias</h4>
     <ul>
-        <li><a href="crear_competencia.php">Crear Nueva Competencia</a></li>
-        <li><a href="listar_competencias.php">Listar Competencias</a></li>
-    </ul>
-
-    <h4>Gestión de Problemas</h4>
-    <ul>
-        <li><a href="crear_problema.php">Crear Nuevo Problema</a></li>
-        <li><a href="listar_problemas.php">Listar Problemas</a></li>
+        <li><a href="admin_competencias.php">Crear Nueva Competencia</a></li>
     </ul>
 
     <h4>Gestión de Usuarios</h4>
@@ -48,20 +43,22 @@ $usuarios_result = $conn->query($sql_usuarios);
     </ul>
 
     <h4>Resultados de Competencias</h4>
-    <table border="1">
+    <table>
         <tr>
             <th>Competencia</th>
             <th>Acciones</th>
         </tr>
         <?php while ($competencia = $competencias_result->fetch_assoc()) { ?>
         <tr>
-            <td><?php echo $competencia['nombre']; ?></td>
-            <td><a href="resultados_competencia.php?id_competencia=<?php echo $competencia['id_competencia']; ?>">Ver Resultados</a></td>
+            <td><?php echo htmlspecialchars($competencia['nombre']); ?></td>
+            <td>
+                <a href="resultados_competencia.php?id_competencia=<?php echo $competencia['id_competencia']; ?>">Ver Resultados</a>
+            </td>
         </tr>
         <?php } ?>
     </table>
 
-    <br>
-    <a href="logout.php">Cerrar Sesión</a>
+    <a href="logout.php" class="logout">Cerrar Sesión</a>
 </body>
 </html>
+

@@ -46,6 +46,7 @@ $result = $conn->query("SELECT * FROM competencias");
 <html>
 <head>
     <title>Gestión de Competencias</title>
+    <link rel="stylesheet" href="admin_competencias.css">
 </head>
 <body>
     <h2>Administrar Competencias</h2>
@@ -53,21 +54,21 @@ $result = $conn->query("SELECT * FROM competencias");
     <form action="admin_competencias.php" method="POST">
         <label>Nombre:</label>
         <input type="text" name="nombre" required>
-        <br>
+        
         <label>Descripción:</label>
         <textarea name="descripcion" required></textarea>
-        <br>
+        
         <label>Fecha de Inicio:</label>
         <input type="datetime-local" name="fecha_inicio" required>
-        <br>
+        
         <label>Duración (minutos):</label>
         <input type="number" name="tiempo_limite" required>
-        <br>
+        
         <button type="submit" name="crear">Crear</button>
     </form>
 
     <h3>Lista de Competencias</h3>
-    <table border="1">
+    <table>
         <tr>
             <th>Nombre</th>
             <th>Descripción</th>
@@ -75,17 +76,26 @@ $result = $conn->query("SELECT * FROM competencias");
             <th>Duración</th>
             <th>Acciones</th>
         </tr>
-        <?php while ($row = $result->fetch_assoc()) { ?>
+        <?php while ($row = $result->fetch_assoc()) { 
+            $editable = strtotime($row['fecha_inicio']) > time(); // Compara la fecha de inicio con la actual
+        ?>
         <tr>
-            <td><?php echo $row['nombre']; ?></td>
-            <td><?php echo $row['descripcion']; ?></td>
-            <td><?php echo $row['fecha_inicio']; ?></td>
-            <td><?php echo $row['tiempo_limite']; ?> minutos</td>
+            <td><?php echo htmlspecialchars($row['nombre']); ?></td>
+            <td><?php echo htmlspecialchars($row['descripcion']); ?></td>
+            <td><?php echo htmlspecialchars($row['fecha_inicio']); ?></td>
+            <td><?php echo htmlspecialchars($row['tiempo_limite']); ?> minutos</td>
             <td>
-                <a href="admin_competencias.php?eliminar=<?php echo $row['id_competencia']; ?>">Eliminar</a>
+                <?php if ($editable) { ?>
+                    <a href="editar_competencia.php?id_competencia=<?php echo $row['id_competencia']; ?>">Editar</a>
+                <?php } else { ?>
+                    <span style="color: gray;">Inhabilitada</span>
+                <?php } ?>
+                <a href="admin_competencias.php?eliminar=<?php echo $row['id_competencia']; ?>" 
+                onclick="return confirm('¿Estás seguro de eliminar esta competencia?');">Eliminar</a>
             </td>
         </tr>
         <?php } ?>
     </table>
 </body>
 </html>
+

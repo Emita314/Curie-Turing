@@ -21,28 +21,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Registro</title>
+    <link rel="stylesheet" type="text/css" href="signup.css">
 </head>
 <body>
-    <h2>Registro</h2>
+    <h2>Registro de Usuario</h2>
     <form action="signup.php" method="POST">
         <label>Nombre:</label>
-        <input type="text" name="nombre" required>
-        <br>
+        <input type="text" name="nombre" placeholder="Tu nombre completo" required>
+        
         <label>Email:</label>
-        <input type="email" name="email" required>
-        <br>
+        <input type="email" name="email" placeholder="ejemplo@correo.com" required>
+        
         <label>Contraseña:</label>
-        <input type="password" name="password" required>
-        <br>
+        <input type="password" name="password" placeholder="Crea una contraseña" required>
+        
         <label>Rol:</label>
-        <select name="rol">
+        <select name="rol" required>
             <option value="competidor">Competidor</option>
             <option value="administrador">Administrador</option>
         </select>
-        <br>
+        
         <button type="submit">Registrarse</button>
     </form>
 </body>
