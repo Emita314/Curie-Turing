@@ -11,15 +11,49 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'competidor') {
 $id_usuario = $_SESSION['id_usuario'];
 $nombre_usuario = $_SESSION['nombre'];
 
-// Obtener las competencias en las que el competidor está inscrito
-$sql_competencias = "SELECT c.* FROM competencias c
-                     JOIN problemas p ON c.id_competencia = p.id_competencia
-                     JOIN envios e ON p.id_problema = e.id_problema
-                     WHERE e.id_usuario = ? GROUP BY c.id_competencia";
-$stmt = $conn->prepare($sql_competencias);
+// Procesar inscripción en una competencia
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inscribirse'])) {
+    $id_competencia = $_POST['id_competencia'];
+
+    // Verificar si ya está inscrito en la competencia antes de intentar insertar
+    $sql_verificar = "SELECT * FROM usuario_competencia WHERE id_usuario = ? AND id_competencia = ?";
+    $stmt = $conn->prepare($sql_verificar);
+    $stmt->bind_param('ii', $id_usuario, $id_competencia);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($resultado->num_rows > 0) {
+        echo "<p style='color: red;'>Ya estás inscrito en esta competencia.</p>";
+    } else {
+        // Insertar inscripción
+        $sql_inscribir = "INSERT INTO usuario_competencia (id_usuario, id_competencia) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql_inscribir);
+        $stmt->bind_param('ii', $id_usuario, $id_competencia);
+        if ($stmt->execute()) {
+            echo "<p style='color: green;'>Te has inscrito correctamente en la competencia.</p>";
+        } else {
+            echo "<p style='color: red;'>Error al inscribirse: " . $stmt->error . "</p>";
+        }
+    }
+}
+
+// Obtener competencias disponibles (no inscritas)
+$sql_disponibles = "SELECT * FROM competencias WHERE id_competencia NOT IN (
+    SELECT id_competencia FROM usuario_competencia WHERE id_usuario = ?
+)";
+$stmt = $conn->prepare($sql_disponibles);
 $stmt->bind_param('i', $id_usuario);
 $stmt->execute();
-$competencias_result = $stmt->get_result();
+$competencias_disponibles = $stmt->get_result();
+
+// Obtener competencias inscritas
+$sql_inscritas = "SELECT c.* FROM competencias c
+    JOIN usuario_competencia uc ON c.id_competencia = uc.id_competencia
+    WHERE uc.id_usuario = ?";
+$stmt = $conn->prepare($sql_inscritas);
+$stmt->bind_param('i', $id_usuario);
+$stmt->execute();
+$competencias_inscritas = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -27,53 +61,50 @@ $competencias_result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Competidor</title>
+    <link rel="stylesheet" href="dashboard_competidor.css">
 </head>
 <body>
     <h2>Bienvenido, Competidor <?php echo $nombre_usuario; ?></h2>
-    <h3>Mis Competencias</h3>
 
+    <!-- Competencias Inscritas -->
+    <h3>Mis Competencias Inscritas</h3>
     <table border="1">
         <tr>
             <th>Competencia</th>
-            <th>Acciones</th>
+            <th>Descripción</th>
+            <th>Fecha de Inicio</th>
         </tr>
-        <?php while ($competencia = $competencias_result->fetch_assoc()) { ?>
+        <?php while ($competencia = $competencias_inscritas->fetch_assoc()) { ?>
         <tr>
             <td><?php echo $competencia['nombre']; ?></td>
-            <td><a href="enviar_solucion.php?id_competencia=<?php echo $competencia['id_competencia']; ?>">Enviar Solución</a></td>
+            <td><?php echo $competencia['descripcion']; ?></td>
+            <td><?php echo $competencia['fecha_inicio']; ?></td>
         </tr>
         <?php } ?>
     </table>
 
-    <h3>Mis Resultados</h3>
+    <br><br>
+
+    <!-- Competencias Disponibles -->
+    <h3>Competencias Disponibles</h3>
     <table border="1">
         <tr>
             <th>Competencia</th>
-            <th>Problema</th>
-            <th>Puntaje</th>
-            <th>Intentos Fallidos</th>
-            <th>Fecha de Envío</th>
+            <th>Descripción</th>
+            <th>Fecha de Inicio</th>
+            <th>Acciones</th>
         </tr>
-        <?php
-        // Obtener los resultados del competidor
-        $sql_resultados = "SELECT c.nombre AS competencia, p.titulo AS problema, e.puntaje, e.intentos_fallidos, e.enviado_en
-                           FROM envios e
-                           JOIN problemas p ON e.id_problema = p.id_problema
-                           JOIN competencias c ON p.id_competencia = c.id_competencia
-                           WHERE e.id_usuario = ?";
-        $stmt = $conn->prepare($sql_resultados);
-        $stmt->bind_param('i', $id_usuario);
-        $stmt->execute();
-        $resultados = $stmt->get_result();
-
-        while ($resultado = $resultados->fetch_assoc()) {
-        ?>
+        <?php while ($competencia = $competencias_disponibles->fetch_assoc()) { ?>
         <tr>
-            <td><?php echo $resultado['competencia']; ?></td>
-            <td><?php echo $resultado['problema']; ?></td>
-            <td><?php echo $resultado['puntaje']; ?></td>
-            <td><?php echo $resultado['intentos_fallidos']; ?></td>
-            <td><?php echo $resultado['enviado_en']; ?></td>
+            <td><?php echo $competencia['nombre']; ?></td>
+            <td><?php echo $competencia['descripcion']; ?></td>
+            <td><?php echo $competencia['fecha_inicio']; ?></td>
+            <td>
+                <form method="POST">
+                    <input type="hidden" name="id_competencia" value="<?php echo $competencia['id_competencia']; ?>">
+                    <button type="submit" name="inscribirse">Inscribirse</button>
+                </form>
+            </td>
         </tr>
         <?php } ?>
     </table>
