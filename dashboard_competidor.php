@@ -68,20 +68,28 @@ $competencias_inscritas = $stmt->get_result();
 
     <!-- Competencias Inscritas -->
     <h3>Mis Competencias Inscritas</h3>
-    <table border="1">
+    <table>
         <tr>
             <th>Competencia</th>
             <th>Descripción</th>
             <th>Fecha de Inicio</th>
+            <th>Acciones</th>
         </tr>
         <?php while ($competencia = $competencias_inscritas->fetch_assoc()) { ?>
         <tr>
             <td><?php echo $competencia['nombre']; ?></td>
             <td><?php echo $competencia['descripcion']; ?></td>
             <td><?php echo $competencia['fecha_inicio']; ?></td>
+            <td>
+                <form method="GET" action="ver_competencia.php">
+                    <input type="hidden" name="id_competencia" value="<?php echo $competencia['id_competencia']; ?>">
+                    <button type="submit">Ver Problemas</button>
+                </form>
+            </td>
         </tr>
         <?php } ?>
     </table>
+
 
     <br><br>
 

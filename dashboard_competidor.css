@@ -94,3 +94,33 @@ a {
 a:hover {
     background-color: #c0392b;
 }
+/* Botón de acción */
+button {
+    background-color: #2ecc71; /* Verde claro */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #27ae60; /* Verde oscuro */
+}
+
+/* Enlace de regreso */
+a.logout {
+    background-color: #e74c3c; /* Rojo */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+a.logout:hover {
+    background-color: #c0392b;
+}
