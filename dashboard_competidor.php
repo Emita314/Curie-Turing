@@ -1,6 +1,8 @@
 <?php
 session_start();
 include 'db.php';
+date_default_timezone_set('America/Argentina/Buenos_Aires');  // Ajusta según tu zona horaria
+
 
 // Verificar si el usuario ha iniciado sesión y tiene rol de competidor
 if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'competidor') {
@@ -10,6 +12,33 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'competidor') {
 
 $id_usuario = $_SESSION['id_usuario'];
 $nombre_usuario = $_SESSION['nombre'];
+
+// Procesar inscripción
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inscribirse'])) {
+    $id_competencia = $_POST['id_competencia'];
+
+    // Verificar si la competencia ya ha iniciado o no
+    $sql_competencia = "SELECT fecha_inicio FROM competencias WHERE id_competencia = ?";
+    $stmt = $conn->prepare($sql_competencia);
+    $stmt->bind_param('i', $id_competencia);
+    $stmt->execute();
+    $resultado = $stmt->get_result()->fetch_assoc();
+
+    // Si la fecha de inicio es menor o igual a la fecha actual, es una competencia en curso
+    if (strtotime($resultado['fecha_inicio']) <= time()) {
+        // Insertar en la tabla de competencias en curso
+        $sql_inscripcion = "INSERT INTO usuario_competencia (id_usuario, id_competencia) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql_inscripcion);
+        $stmt->bind_param('ii', $id_usuario, $id_competencia);
+        $stmt->execute();
+    } else {
+        // Insertar en la tabla de competencias inscritas (no iniciadas)
+        $sql_inscripcion = "INSERT INTO usuario_competencia (id_usuario, id_competencia) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql_inscripcion);
+        $stmt->bind_param('ii', $id_usuario, $id_competencia);
+        $stmt->execute();
+    }
+}
 
 // Competencias disponibles
 $sql_disponibles = "SELECT * FROM competencias WHERE id_competencia NOT IN (
@@ -78,39 +107,40 @@ $competencias_en_curso = $stmt->get_result();
     <!-- Contenedor para tablas de Inscritas y En Curso -->
     <div class="tables-container">
         <!-- Competencias Inscritas -->
-        <div class="table-wrapper">
-            <h3>Competencias en Curso</h3>
-            <table>
-                <tr>
-                    <th>Competencia</th>
-                    <th>Descripción</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Acciones</th>
-                </tr>
-                <?php while ($competencia = $competencias_inscritas->fetch_assoc()) { ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($competencia['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($competencia['descripcion']); ?></td>
-                    <td><?php echo htmlspecialchars($competencia['fecha_inicio']); ?></td>
-                    <td>
-                        <!-- Mostrar el botón solo si la competencia ya ha iniciado -->
-                        <?php if (strtotime($competencia['fecha_inicio']) <= time()) { ?>
-                            <form method="GET" action="ver_competencia.php">
-                                <input type="hidden" name="id_competencia" value="<?php echo $competencia['id_competencia']; ?>">
-                                <button type="submit">Ver Problemas</button>
-                            </form>
-                        <?php } else { ?>
-                            <span style="color: gray;">Esperando inicio...</span>
-                        <?php } ?>
-                    </td>
-                </tr>
+<div class="table-wrapper">
+    <h3>Competencias Inscritas</h3>
+    <table>
+        <tr>
+            <th>Competencia</th>
+            <th>Descripción</th>
+            <th>Fecha de Inicio</th>
+            <th>Acciones</th>
+        </tr>
+        <?php while ($competencia = $competencias_inscritas->fetch_assoc()) { ?>
+        <tr>
+            <td><?php echo htmlspecialchars($competencia['nombre']); ?></td>
+            <td><?php echo htmlspecialchars($competencia['descripcion']); ?></td>
+            <td><?php echo htmlspecialchars($competencia['fecha_inicio']); ?></td>
+            <td>
+                <!-- Mostrar el botón solo si la competencia ya ha iniciado -->
+                <?php if (strtotime($competencia['fecha_inicio']) <= time()) { ?>
+                    <form method="GET" action="ver_competencia.php">
+                        <input type="hidden" name="id_competencia" value="<?php echo $competencia['id_competencia']; ?>">
+                        <button type="submit">Ver Problemas</button>
+                    </form>
+                <?php } else { ?>
+                    <span style="color: gray;">Esperando inicio...</span>
                 <?php } ?>
-            </table>
-        </div>
+            </td>
+        </tr>
+        <?php } ?>
+    </table>
+</div>
+
 
         <!-- Competencias en Curso -->
         <div class="table-wrapper">
-            <h3>Mis Competencias</h3>
+            <h3>Competencias en Curso</h3>
             <table>
                 <tr>
                     <th>Competencia</th>
