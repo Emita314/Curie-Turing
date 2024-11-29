@@ -91,6 +91,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         ?>
     </ul>
-    <a href="crear_problema.php?id_competencia=<?php echo $id_competencia; ?>">Agregar Nuevo Problema</a>
 </body>
 </html>
