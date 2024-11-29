@@ -87,6 +87,11 @@ $competencias_result = $stmt_competencias->get_result();
         <div id="snackbar"><?php echo htmlspecialchars($mensaje); ?></div>
     <?php } ?>
 
+    <?php if (isset($_GET['mensaje'])) { ?>
+    <div id="snackbar"><?php echo htmlspecialchars($_GET['mensaje']); ?></div>
+    <?php } ?>
+
+
     <table>
         <tr>
             <th>Nombre</th>
@@ -106,6 +111,12 @@ $competencias_result = $stmt_competencias->get_result();
             <td><?php echo htmlspecialchars($competencia['fecha_inicio']); ?></td>
             <td><?php echo htmlspecialchars($competencia['tiempo_limite']); ?></td>
             <td>
+
+                <!-- Enlace a detalle_competencia.php -->
+                <a href="detalle_competencia.php?id_competencia=<?php echo $competencia['id_competencia']; ?>"          title="Ver Detalles">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+
                 <!-- Botón de resultados -->
                 <a href="resultados_competencia.php?id_competencia=<?php echo $competencia['id_competencia']; ?>" title="Ver Resultados">
                     <i class="fas fa-chart-bar"></i>
