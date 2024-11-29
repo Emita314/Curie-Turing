@@ -11,6 +11,22 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 'administrador') {
 $id_usuario = $_SESSION['id_usuario'];
 $nombre_usuario = $_SESSION['nombre'];
 
+// Verificar si se ha solicitado eliminar una competencia
+if (isset($_GET['eliminar']) && is_numeric($_GET['eliminar'])) {
+    $id_competencia = intval($_GET['eliminar']);
+
+    // Verificar que la competencia pertenece al administrador antes de eliminarla
+    $stmt = $conn->prepare("DELETE FROM competencias WHERE id_competencia = ? AND creado_por = ?");
+    $stmt->bind_param("ii", $id_competencia, $id_usuario);
+
+    if ($stmt->execute()) {
+        $mensaje = "Competencia eliminada con éxito.";
+    } else {
+        $mensaje = "Error al eliminar la competencia.";
+    }
+    $stmt->close();
+}
+
 // Obtener solo las competencias creadas por el administrador actual
 $sql_competencias = "SELECT * FROM competencias WHERE creado_por = ?";
 $stmt_competencias = $conn->prepare($sql_competencias);
@@ -27,6 +43,33 @@ $competencias_result = $stmt_competencias->get_result();
     <!-- Enlace a Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard_admin.css">
+    <style>
+        /* Estilos para el Snack Bar */
+        #snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+
+        /* Mostrar el snack bar cuando se activa */
+        #snackbar.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
 </head>
 <body>
     <h2>Bienvenido, Administrador <?php echo htmlspecialchars($nombre_usuario); ?></h2>
@@ -38,6 +81,12 @@ $competencias_result = $stmt_competencias->get_result();
     </ul>
 
     <h4>Resultados de Competencias</h4>
+    
+    <!-- Snack bar para el mensaje -->
+    <?php if (isset($mensaje)) { ?>
+        <div id="snackbar"><?php echo htmlspecialchars($mensaje); ?></div>
+    <?php } ?>
+
     <table>
         <tr>
             <th>Nombre</th>
@@ -72,7 +121,7 @@ $competencias_result = $stmt_competencias->get_result();
                 <?php } ?>
 
                 <!-- Botón de eliminar -->
-                <a href="eliminar_competencia.php?id_competencia=<?php echo $competencia['id_competencia']; ?>" 
+                <a href="dashboard_admin.php?eliminar=<?php echo $competencia['id_competencia']; ?>" 
                    onclick="return confirm('¿Estás seguro de que deseas eliminar esta competencia?');" 
                    title="Eliminar" style="color: red;">
                     <i class="fas fa-trash-alt"></i>
@@ -83,6 +132,18 @@ $competencias_result = $stmt_competencias->get_result();
     </table>
 
     <a href="logout.php" class="logout">Cerrar Sesión</a>
+
+    <script>
+        // Mostrar el snack bar cuando se carga la página si hay un mensaje
+        window.onload = function() {
+            var snackbar = document.getElementById("snackbar");
+            if (snackbar) {
+                snackbar.className = "show";
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000); // El snack bar desaparece después de 3 segundos
+            }
+        }
+    </script>
 </body>
 </html>
-
