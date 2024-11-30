@@ -27,13 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inscribirse'])) {
     // Si la fecha de inicio es menor o igual a la fecha actual, es una competencia en curso
     if (strtotime($resultado['fecha_inicio']) <= time()) {
         // Insertar en la tabla de competencias en curso
-        $sql_inscripcion = "INSERT INTO usuario_competencia (id_usuario, id_competencia) VALUES (?, ?)";
+        $sql_inscripcion = "INSERT INTO resultados (id_usuario, id_competencia) VALUES (?, ?)";
         $stmt = $conn->prepare($sql_inscripcion);
         $stmt->bind_param('ii', $id_usuario, $id_competencia);
         $stmt->execute();
     } else {
         // Insertar en la tabla de competencias inscritas (no iniciadas)
-        $sql_inscripcion = "INSERT INTO usuario_competencia (id_usuario, id_competencia) VALUES (?, ?)";
+        $sql_inscripcion = "INSERT INTO resultados (id_usuario, id_competencia) VALUES (?, ?)";
         $stmt = $conn->prepare($sql_inscripcion);
         $stmt->bind_param('ii', $id_usuario, $id_competencia);
         $stmt->execute();
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inscribirse'])) {
 
 // Competencias disponibles
 $sql_disponibles = "SELECT * FROM competencias WHERE id_competencia NOT IN (
-    SELECT id_competencia FROM usuario_competencia WHERE id_usuario = ?
+    SELECT id_competencia FROM resultados WHERE id_usuario = ?
 )";
 $stmt = $conn->prepare($sql_disponibles);
 $stmt->bind_param('i', $id_usuario);
@@ -51,7 +51,7 @@ $competencias_disponibles = $stmt->get_result();
 
 // Competencias inscritas (aún no iniciadas)
 $sql_inscritas = "SELECT c.* FROM competencias c
-    JOIN usuario_competencia uc ON c.id_competencia = uc.id_competencia
+    JOIN resultados uc ON c.id_competencia = uc.id_competencia
     WHERE uc.id_usuario = ? AND c.fecha_inicio > NOW()";
 $stmt = $conn->prepare($sql_inscritas);
 $stmt->bind_param('i', $id_usuario);
@@ -60,7 +60,7 @@ $competencias_inscritas = $stmt->get_result();
 
 // Competencias en curso (ya iniciadas)
 $sql_en_curso = "SELECT c.* FROM competencias c
-    JOIN usuario_competencia uc ON c.id_competencia = uc.id_competencia
+    JOIN resultados uc ON c.id_competencia = uc.id_competencia
     WHERE uc.id_usuario = ? AND c.fecha_inicio <= NOW()";
 $stmt = $conn->prepare($sql_en_curso);
 $stmt->bind_param('i', $id_usuario);

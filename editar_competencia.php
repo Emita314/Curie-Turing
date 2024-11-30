@@ -79,11 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h3>Problemas Asociados</h3>
     <ul>
         <?php
-        $sql_problemas = "SELECT * FROM problemas WHERE id_competencia = ?";
+        $sql_problemas = "
+            SELECT p.*
+            FROM problemas p
+            JOIN competencia_problema cp ON p.id_problema = cp.id_problema
+            WHERE cp.id_competencia = ?";
         $stmt = $conn->prepare($sql_problemas);
         $stmt->bind_param('i', $id_competencia);
         $stmt->execute();
         $result_problemas = $stmt->get_result();
+    
 
         while ($problema = $result_problemas->fetch_assoc()) {
             echo "<li>" . htmlspecialchars($problema['titulo']) . " 
@@ -91,5 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         ?>
     </ul>
+
+    <a href="dashboard_admin.php" class="back">Volver al Dashboard</a>
 </body>
 </html>

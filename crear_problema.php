@@ -8,31 +8,37 @@ if ($_SESSION['rol'] !== 'administrador') {
     exit();
 }
 
-$id_competencia = $_GET['id_competencia'] ?? null;
-if (!$id_competencia) {
-    echo "ID de competencia no válido.";
-    exit();
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Capturar datos del formulario
     $titulo = $_POST['titulo'];
     $descripcion = $_POST['descripcion'];
     $puntaje_base = $_POST['puntaje_base'] ?? 100; // Puntaje base predeterminado
+    $resultado_esperado = $_POST['resultado_esperado'];
+    $tipo_problema = $_POST['tipo_problema'];
+
+    // Validar tipo_problema para asegurar que sea un valor permitido
+    $tipos_permitidos = ['Informatica', 'Fisica', 'Quimica', 'Matematicas'];
+    if (!in_array($tipo_problema, $tipos_permitidos)) {
+        echo "Error: Tipo de problema no válido.";
+        exit();
+    }
 
     // Preparar la consulta para insertar el nuevo problema
-    $sql = "INSERT INTO problemas (id_competencia, titulo, descripcion, puntaje_base) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO problemas (titulo, descripcion, puntaje_base, resultado_esperado, tipo_problema) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('isss', $id_competencia, $titulo, $descripcion, $puntaje_base);
+    $stmt->bind_param('ssiss', $titulo, $descripcion, $puntaje_base, $resultado_esperado, $tipo_problema);
 
+    // Ejecutar la consulta y verificar el resultado
     if ($stmt->execute()) {
         echo "Problema agregado exitosamente.";
-        header("Location: editar_competencia.php?id_competencia=$id_competencia");
+        header("Location: admin_problemas.php");
         exit();
     } else {
         echo "Error: " . $stmt->error;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -41,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-    <h2>Agregar Problema a la Competencia</h2>
+<h2>Agregar Problema</h2>
 
     <!-- Formulario para agregar un nuevo problema -->
     <form action="" method="POST">
@@ -54,10 +60,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="puntaje_base">Puntaje Base:</label>
         <input type="number" name="puntaje_base" id="puntaje_base" value="100" min="1" required>
 
+        <label for="resultado_esperado">Resultado esperado:</label>
+        <input type="text" name="resultado_esperado" id="resultado_esperado" required>
+
+        <label for="tipo_problema">Tipo de Problema:</label>
+        <select name="tipo_problema" id="tipo_problema" required>
+            <option value="">Seleccione un tipo</option>
+            <option value="Matematicas">Matemáticas</option>
+            <option value="Fisica">Fisica</option>
+            <option value="Quimica">Quimica</option>
+            <option value="Informatica">Informatica</option>
+        </select>
+
         <button type="submit">Agregar Problema</button>
     </form>
-
     <br>
-    <a href="editar_competencia.php?id_competencia=<?php echo $id_competencia; ?>">Volver a la Competencia</a>
+    <a href="admin_problemas.php?id_competencia=<?php echo $id_competencia; ?>">Volver</a>
 </body>
 </html>
