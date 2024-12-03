@@ -40,41 +40,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Agregar Problema</title>
-    <link rel="stylesheet" href="admin.css">
-</head>
-<body>
-<h2>Agregar Problema</h2>
+<?php include 'header.php'; ?>
 
-    <!-- Formulario para agregar un nuevo problema -->
+<?php include 'navbar.php'; ?>
+
+<div class="form-container">
+    <h2>Agregar Problema</h2>
     <form action="" method="POST">
-        <label for="titulo">Título del Problema:</label>
-        <input type="text" name="titulo" id="titulo" required>
-        
-        <label for="descripcion">Descripción del Problema:</label>
-        <textarea name="descripcion" id="descripcion" required></textarea>
-        
-        <label for="puntaje_base">Puntaje Base:</label>
-        <input type="number" name="puntaje_base" id="puntaje_base" value="100" min="1" required>
+        <div class="form-group">
+            <label for="titulo">Título del Problema:</label>
+            <input type="text" name="titulo" id="titulo" required>
+        </div>
 
-        <label for="resultado_esperado">Resultado esperado:</label>
-        <input type="text" name="resultado_esperado" id="resultado_esperado" required>
+        <div class="form-group">
+            <label for="descripcion">Descripción del Problema:</label>
+            <textarea name="descripcion" id="descripcion" required></textarea>
+        </div>
 
-        <label for="tipo_problema">Tipo de Problema:</label>
-        <select name="tipo_problema" id="tipo_problema" required>
-            <option value="">Seleccione un tipo</option>
-            <option value="Matematicas">Matemáticas</option>
-            <option value="Fisica">Fisica</option>
-            <option value="Quimica">Quimica</option>
-            <option value="Informatica">Informatica</option>
-        </select>
+        <div class="form-group">
+            <label for="puntaje_base">Puntaje Base:</label>
+            <input type="number" name="puntaje_base" id="puntaje_base" value="100" min="1" required>
+        </div>
 
-        <button type="submit">Agregar Problema</button>
+        <div class="form-group">
+            <label for="resultado_esperado">Resultado esperado:</label>
+            <input type="text" name="resultado_esperado" id="resultado_esperado" required>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo_problema">Tipo de Problema:</label>
+            <select name="tipo_problema" id="tipo_problema" required>
+                <option value="">Seleccione un tipo</option>
+                <option value="Matematicas">Matemáticas</option>
+                <option value="Fisica">Física</option>
+                <option value="Quimica">Química</option>
+                <option value="Informatica">Informática</option>
+            </select>
+        </div>
+
+        <div class="form-submit">
+            <button type="submit">Agregar Problema</button>
+        </div>
     </form>
-    <br>
-    <a href="admin_problemas.php?id_competencia=<?php echo $id_competencia; ?>">Volver</a>
-</body>
-</html>
+
+    <a href="admin_problemas.php?id_competencia=<?php echo $id_competencia; ?>" class="back-link">Volver</a>
+</div>
+
+
+<?php include 'footer.php'; ?>

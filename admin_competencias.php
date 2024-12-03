@@ -38,34 +38,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gestión de Competencias</title>
-    <link rel="stylesheet" href="admin_competencias.css">
-</head>
-<body>
-    <h2>Administrar Competencias</h2>
+<?php include 'header.php'; ?>
+<?php include 'navbar.php'; ?>
+
+<div class="form-container">
+    <h2>Crear Nueva Competencias</h2>
 
     <?php if (isset($error)) { ?>
         <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
     <?php } ?>
 
-    <h3>Crear Nueva Competencia</h3>
     <form action="admin_competencias.php" method="POST">
+    <div class="form-group">
         <label>Nombre:</label>
         <input type="text" name="nombre" required>
+    </div>
         
+    <div class="form-group">
         <label>Descripción (opcional):</label>
         <textarea name="descripcion"></textarea>
+    </div>
         
+    <div class="form-group">
         <label>Fecha de Inicio:</label>
         <input type="datetime-local" name="fecha_inicio" required>
+    </div>
         
+    <div class="form-group">
         <label>Duración (minutos):</label>
         <input type="number" name="tiempo_limite" required>
+    </div>
         
+    <div class="form-group">
         <label>Tipo de Competencia:</label>
         <select name="tipo_competencia" required>
             <option value="">Seleccionar tipo</option>
@@ -74,8 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear'])) {
             <option value="Quimica">Química</option>
             <option value="Matematicas">Matemáticas</option>
         </select>
-        
+    </div>
+
+    <div class="form-submit">
         <button type="submit" name="crear">Crear</button>
+    </div>
     </form>
-</body>
-</html>
+</div>
+
+<?php include 'footer.php'; ?>

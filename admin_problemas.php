@@ -34,15 +34,10 @@ if ($result->num_rows > 0) {
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Problemas por Tipo</title>
-</head>
-<body>
+<?php include 'header.php'; ?>
+<?php include 'navbar.php'; ?>
 
+<main>
     <h2>Problemas</h2>
 
     <section class="options">
@@ -71,5 +66,6 @@ $conn->close();
     <?php } ?>
 
     <a href="dashboard_admin.php" class="back">Volver al Dashboard</a>
-</body>
-</html>
+</main>
+
+<?php include 'footer.php'; ?>

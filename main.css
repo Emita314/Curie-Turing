@@ -1,0 +1,476 @@
+/* Variables de color para fácil personalización */
+:root {
+    --primary-color: #2a9d8f;  /* Verde azulado */
+    --secondary-color: #264653; /* Azul oscuro */
+    --accent-color: #e76f51;   /* Rojo coral */
+    --background-color: #f4f1de; /* Crema */
+    --text-color: #333333;      /* Gris oscuro */
+    --text-light-color: #FFFFFF;
+    --hover-color: #f4a261;     /* Naranja suave */
+    --disabled-color: #b0b0b0;  /* Gris claro para elementos deshabilitados */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos globales */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Navbar minimalista */
+.navbar {
+    background-color: var(--secondary-color);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: static;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/*Logo*/
+
+/* Estilo para el logo */
+.logo a {
+    color: var(--text-light-color);
+    text-decoration: none;
+    font-size: 2rem; /* Aumenta el tamaño para hacerlo más visible */
+    font-weight: bold;
+    text-transform: uppercase; /* Transforma el texto a mayúsculas */
+    letter-spacing: 2px; /* Espaciado entre letras para un toque moderno */
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto de hover para hacer el logo más interactivo */
+.logo a:hover {
+    color: var(--primary-color); /* Cambio de color en hover */
+    transform: translateY(-5px); /* Mueve el logo hacia arriba */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Añade sombra sutil */
+}
+
+/* Efecto al hacer click en el logo */
+.logo a:active {
+    transform: translateY(0); /* Vuelve a su posición original al hacer clic */
+    box-shadow: none; /* Elimina la sombra al hacer clic */
+}
+
+
+
+.navbar nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+}
+
+.navbar nav ul li a {
+    color: var(--text-light-color);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.navbar nav ul li a:hover {
+    background-color: var(--hover-color);
+    color: var(--text-light-color);
+}
+
+/* Opciones del dashboard */
+.options {
+    margin: 2rem;
+    padding: 1rem;
+    background-color: var(--text-light-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    transition: transform 0.3s ease-in-out;
+}
+
+.options h4 {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+}
+
+.options ul {
+    list-style: none;
+    padding: 0;
+}
+
+.options ul li {
+    margin: 0.5rem 0;
+}
+
+.options ul li a {
+    color: var(--primary-color);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.options:hover {
+    transform: scale(1.02);
+}
+
+/* Estilos de los iconos */
+.fas {
+    font-size: 1.3rem;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Colores específicos para cada tipo de acción de los iconos */
+.fas.fa-edit {
+    color: #ffb74d; /* Naranja suave */
+}
+
+.fas.fa-trash-alt {
+    color: #e57373; /* Rojo */
+}
+
+.fas.fa-info-circle {
+    color: #4caf50; /* Verde */
+}
+
+.fas.fa-chart-bar {
+    color: #2196f3; /* Azul */
+}
+
+/* Deshabilitar el botón de editar */
+.fas.fa-edit.disabled {
+    color: var(--disabled-color);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    background-color: var(--text-light-color);
+    box-shadow: 0 4px 6px var(--shadow-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table thead tr {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--text-light-color);
+}
+
+table th, table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table tr:hover {
+    background-color: #f9f9f9;
+}
+
+table td a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+table td a:hover {
+    color: var(--hover-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--secondary-color);
+    color: var(--text-light-color);
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+    box-shadow: 0 -2px 4px var(--shadow-color);
+}
+
+/* Snack bar */
+#snackbar {
+    background-color: var(--hover-color);
+    color: var(--text-light-color);
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+/* Efectos de animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.snackbar.show {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Estilos para el dropdown en el navbar */
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.navbar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.navbar .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.navbar .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.navbar .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Estilo del botón del perfil */
+.navbar .dropbtn {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.navbar .dropbtn i {
+    margin-right: 8px;
+}
+
+/* Estilo para el icono de perfil */
+.navbar .fas.fa-user {
+    font-size: 20px;
+    color: #333;
+}
+
+/* Hover sobre el icono de perfil */
+.navbar .dropbtn:hover {
+    color: var(--primary-color);
+}
+
+.navbar .dropdown:hover .fas.fa-caret-down {
+    color: var(--primary-color);
+}
+
+/* Icono de perfil */
+.profile-icon {
+    position: absolute;
+    right: 20px;
+    top: 80px;
+    transform: translateY(-50%);
+}
+
+.profile-icon .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.profile-icon .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.profile-icon .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-icon .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Estilos para el contenido principal */
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Asegura que el contenido se centre verticalmente */
+    padding: 20px;
+}
+
+/* Estilo del título */
+h2 {
+    font-size: 2rem;
+    color: #264653; /* Azul oscuro */
+    margin-bottom: 1rem;
+}
+
+/* Estilo de los párrafos */
+p {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Contenedor de los botones */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Estilo para los botones */
+.button {
+    text-decoration: none;
+    background-color: #2a9d8f; /* Verde azulado */
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button:hover {
+    background-color: #264653; /* Cambia a azul oscuro al pasar el ratón */
+    transform: translateY(-3px); /* Efecto de elevación al pasar el ratón */
+}
+
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: var(--text-light-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+main h2 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+main section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+main section h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+main section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+main section ul li {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--text-light-color);
+    border-radius: 5px;
+    box-shadow: 0 1px 3px var(--shadow-color);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+main section ul li:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+}
+
+main section ul li strong {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+main .options ul {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+main .options ul li a {
+    text-decoration: none;
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+main .options ul li a:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+}
+
+main p {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+main .back {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--text-light-color);
+    background-color: var(--secondary-color);
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 2rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+main .back:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+}
+

@@ -1,0 +1,90 @@
+
+/* Contenedor del formulario */
+.form-container {
+    width: 70%;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #ffffff; /* Blanco */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 3rem;
+}
+
+/* Título */
+.form-container h2 {
+    text-align: center;
+    color: #264653; /* Azul oscuro */
+    margin-bottom: 2rem;
+}
+
+/* Contenedor de cada campo de formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #333333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 0.3rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #2a9d8f; /* Verde azulado */
+    outline: none;
+}
+
+/* Estilo para el textarea */
+textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* Botón de envío */
+.form-submit {
+    text-align: center;
+}
+
+.form-submit button {
+    background-color: #2a9d8f; /* Verde azulado */
+    color: #ffffff; /* Blanco */
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-submit button:hover {
+    background-color: #e76f51; /* Rojo coral */
+}
+
+/* Enlace de volver */
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: #2a9d8f; /* Verde azulado */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
